@@ -12,7 +12,7 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            App()
+            App(intent.data?.toString())
         }
     }
 }
@@ -20,12 +20,12 @@ class MainActivity : ComponentActivity() {
 @Preview
 @Composable
 private fun Preview() {
-    App()
+    App("Preview")
 }
 
 @Composable
-private fun App() {
+private fun App(intentData: String?) {
     MinimalAndroidBrowserTheme().Show {
-        Navigation().Show()
+        Navigation(intentData).Show()
     }
 }

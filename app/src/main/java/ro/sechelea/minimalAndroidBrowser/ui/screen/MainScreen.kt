@@ -2,28 +2,21 @@ package ro.sechelea.minimalAndroidBrowser.ui.screen
 
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import ro.sechelea.minimalAndroidBrowser.ui.Background
 
 class MainScreen(
-    private val navController: NavHostController
+    private val navController: NavHostController,
+    private val intentUrl: String?
 ) : UiScreen{
     @Composable
     override fun Show() {
         Background {
-            Greeting()
+            if (intentUrl == null ) {
+                Text(text = "App was opened from main screen.")
+            } else {
+                Text(text = "You are trying to access \" $intentUrl \"")
+            }
         }
-    }
-
-    @Composable
-    private fun Greeting(
-        modifier: Modifier = Modifier,
-        name: String = "World",
-    ) {
-        Text(
-            text = "Hello $name!",
-            modifier = modifier
-        )
     }
 }

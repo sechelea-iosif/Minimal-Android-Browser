@@ -5,13 +5,15 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 
-class Navigation: UiScreen {
+class Navigation(
+    private val url: String?
+): UiScreen {
     @Composable
     override fun Show() {
         val navController = rememberNavController()
         NavHost(navController = navController, startDestination = "main") {
             composable("main") {
-                MainScreen(navController).Show()
+                MainScreen(navController, url).Show()
             }
         }
     }
