@@ -2,7 +2,7 @@
 * [x] render webpage of incoming links
 * [x] home page explaining usage of app
 * [x] handle bad urls
-* [ ] handle navigation within opened webpage -> disable all
+* [x] handle navigation within opened webpage -> disable all
 * [ ] handle navigation within opened webpage -> allow any starting with root of incoming link. 
   * Example: For https://en.wikipedia.org/wiki/Western_Chalukya_Empire#Society allow any starting with 
 https://en.wikipedia.org/wiki/Western_Chalukya_Empire 

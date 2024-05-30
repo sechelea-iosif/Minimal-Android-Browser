@@ -1,9 +1,7 @@
 package ro.sechelea.minimalAndroidBrowser.ui
 
-import android.webkit.WebChromeClient
 import android.webkit.WebSettings
 import android.webkit.WebView
-import android.webkit.WebViewClient
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -13,6 +11,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.viewinterop.AndroidView
+import ro.sechelea.minimalAndroidBrowser.client.MinimalWebViewClient
 
 @Composable
 fun Background(
@@ -43,8 +42,7 @@ fun CenteredColumn(
 fun AndroidWebView(webUrl: String) {
     AndroidView(factory = {
         WebView(it).apply {
-            webViewClient = WebViewClient()
-            webChromeClient = WebChromeClient()
+            webViewClient = MinimalWebViewClient(webUrl)
             settings.apply {
                 // js
                 javaScriptEnabled = true
