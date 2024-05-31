@@ -7,4 +7,8 @@
   * Example: For https://en.wikipedia.org/wiki/Western_Chalukya_Empire#Society allow any starting with 
 https://en.wikipedia.org/wiki/Western_Chalukya_Empire 
 * [ ] add settings page
-  * [ ] todo - define and add settings individually
+  * [ ] optionally password protect settings page
+  * [ ] add persistence
+  * [ ] persist password
+  * [ ] allow password change
+  * [ ] blacklisted websites
