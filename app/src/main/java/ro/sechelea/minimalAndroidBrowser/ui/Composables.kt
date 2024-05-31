@@ -39,15 +39,21 @@ fun CenteredColumn(
 }
 
 @Composable
-fun AndroidWebView(webUrl: String) {
+fun AndroidWebView(
+    webUrl: String,
+    onValueChange: (String) -> Unit
+) {
     AndroidView(factory = {
         WebView(it).apply {
-            webViewClient = MinimalWebViewClient(webUrl)
+            webViewClient = MinimalWebViewClient(webUrl, onValueChange)
             settings.apply {
+                // security
+                safeBrowsingEnabled = true
                 // js
                 javaScriptEnabled = true
                 domStorageEnabled = true
                 javaScriptCanOpenWindowsAutomatically = false
+//                setSupportMultipleWindows(false)
                 // network
                 allowContentAccess = true
                 allowFileAccess = false
@@ -62,8 +68,6 @@ fun AndroidWebView(webUrl: String) {
                 mediaPlaybackRequiresUserGesture = true
                 mixedContentMode = WebSettings.MIXED_CONTENT_COMPATIBILITY_MODE
                 useWideViewPort = true
-                // security
-                safeBrowsingEnabled = true
             }
         }
     }, update = {

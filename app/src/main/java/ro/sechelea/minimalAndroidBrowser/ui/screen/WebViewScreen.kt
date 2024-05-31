@@ -8,6 +8,10 @@ import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.material3.Card
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.unit.dp
@@ -18,9 +22,11 @@ class WebViewScreen(
 ): UiScreen {
     @Composable
     override fun Show() {
+        var displayedUrl by remember { mutableStateOf(webUrl) }
         Column(modifier = Modifier.fillMaxSize()) {
-            UrlText(webUrl)
-            AndroidWebView(webUrl)
+            UrlText(displayedUrl)
+            AndroidWebView(displayedUrl,
+                onValueChange = { displayedUrl = it })
         }
     }
 
@@ -32,7 +38,9 @@ class WebViewScreen(
         ) {
             SelectionContainer {
                 Text(
-                    modifier = Modifier.fillMaxWidth().padding(10.dp),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(10.dp),
                     text = webUrl
                 )
             }
