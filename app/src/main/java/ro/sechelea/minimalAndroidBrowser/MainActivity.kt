@@ -5,7 +5,8 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
-import ro.sechelea.minimalAndroidBrowser.ui.screen.Navigation
+import ro.sechelea.minimalAndroidBrowser.ui.Background
+import ro.sechelea.minimalAndroidBrowser.ui.screen.main.MainScreen
 import ro.sechelea.minimalAndroidBrowser.ui.theme.MinimalAndroidBrowserTheme
 
 class MainActivity : ComponentActivity() {
@@ -26,6 +27,8 @@ private fun Preview() {
 @Composable
 private fun App(intentData: String?) {
     MinimalAndroidBrowserTheme().Show {
-        Navigation(intentData).Show()
+        Background {
+            MainScreen(intentData).Show()
+        }
     }
 }

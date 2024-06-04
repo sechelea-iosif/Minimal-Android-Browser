@@ -1,4 +1,4 @@
-package ro.sechelea.minimalAndroidBrowser.ui.screen
+package ro.sechelea.minimalAndroidBrowser.ui.screen.web
 
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.selection.SelectionContainer
@@ -9,6 +9,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import ro.sechelea.minimalAndroidBrowser.ui.Background
 import ro.sechelea.minimalAndroidBrowser.ui.CenteredColumn
+import ro.sechelea.minimalAndroidBrowser.ui.screen.UiScreen
 
 class ErrorScreen(
     private val incomingUrl: String?
