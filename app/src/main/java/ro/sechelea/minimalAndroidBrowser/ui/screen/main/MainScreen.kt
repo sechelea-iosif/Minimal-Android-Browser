@@ -24,6 +24,7 @@ import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import ro.sechelea.minimalAndroidBrowser.ui.screen.NavigationDestination.SETTINGS_PASSWORD
 import ro.sechelea.minimalAndroidBrowser.ui.screen.UiScreen
 
 class MainScreen(
@@ -70,7 +71,7 @@ class MainScreen(
 
     @Composable
     private fun SettingsIconButton(navController: NavHostController) {
-        IconButton(onClick = { navController.navigate(Navigation.NavigationDestination.SETTINGS_PASSWORD.destination) }) {
+        IconButton(onClick = { navController.navigate(SETTINGS_PASSWORD.destination) }) {
             Icon(imageVector = Icons.Rounded.Settings, contentDescription = "Settings")
         }
     }

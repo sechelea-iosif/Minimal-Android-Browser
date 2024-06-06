@@ -7,6 +7,7 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import ro.sechelea.minimalAndroidBrowser.ui.screen.NavigationDestination
 import ro.sechelea.minimalAndroidBrowser.ui.screen.UiScreen
 import ro.sechelea.minimalAndroidBrowser.ui.screen.settings.SettingsPasswordScreen
 import ro.sechelea.minimalAndroidBrowser.ui.screen.settings.SettingsScreen
@@ -45,7 +46,7 @@ class Navigation(
             }
             composable(NavigationDestination.SETTINGS.destination) {
                 updateTitle("Settings")
-                SettingsScreen().Show()
+                SettingsScreen(navController).Show()
             }
         }
     }
@@ -58,14 +59,6 @@ class Navigation(
 
     private fun isValidUrl(incomingUrl: String): Boolean {
         return incomingUrl.matches("https?://\\S*".toRegex())
-    }
-
-    enum class NavigationDestination(val destination: String) {
-        HOME("home"),
-        ERROR("error"),
-        WEBVIEW("webview"),
-        SETTINGS_PASSWORD("settings_password"),
-        SETTINGS("settings")
     }
 
 }

@@ -2,4 +2,5 @@
 plugins {
     alias(libs.plugins.androidApplication) apply false
     alias(libs.plugins.jetbrainsKotlinAndroid) apply false
+    id("com.autonomousapps.dependency-analysis") version ("1.10.0")
 }

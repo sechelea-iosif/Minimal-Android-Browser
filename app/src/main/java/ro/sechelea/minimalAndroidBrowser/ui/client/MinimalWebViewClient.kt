@@ -1,10 +1,9 @@
-package ro.sechelea.minimalAndroidBrowser.client
+package ro.sechelea.minimalAndroidBrowser.ui.client
 
 import android.util.Log
 import android.webkit.WebResourceRequest
 import android.webkit.WebView
 import android.webkit.WebViewClient
-import ro.sechelea.minimalAndroidBrowser.base.stripUrlBeforeSecondLevelDomain
 
 class MinimalWebViewClient(
     private val initialWebUrl: String,
@@ -32,8 +31,8 @@ class MinimalWebViewClient(
     }
 
     private fun shouldBlockUrl(url: String): Boolean {
-        val newUrl = url.stripUrlBeforeSecondLevelDomain()
-        val initialUrl = initialWebUrl.stripUrlBeforeSecondLevelDomain()
+        val newUrl = stripUrlBeforeSecondLevelDomain(url)
+        val initialUrl = stripUrlBeforeSecondLevelDomain(initialWebUrl)
         if (newUrl == null || initialUrl == null) {
             return true
         }
@@ -43,4 +42,17 @@ class MinimalWebViewClient(
             return !(endOfNewUrl.startsWith("?") || endOfNewUrl.startsWith("#"))
         } else return true
     }
+
+    private fun stripUrlBeforeSecondLevelDomain(url: String): String? {
+        val processedUrl = url.lowercase().trim() + "/"
+        val regex = "[^./]*\\.[^.]*/.*".toRegex()
+        val match = regex.find(processedUrl)?.value
+        val trimmed = match?.dropLast(1)
+        return when {
+            trimmed == null -> null
+            !trimmed.contains("/") -> "$trimmed/"
+            else -> trimmed
+        }
+    }
+
 }
