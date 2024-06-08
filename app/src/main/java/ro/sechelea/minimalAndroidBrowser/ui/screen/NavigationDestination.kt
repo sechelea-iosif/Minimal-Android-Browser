@@ -4,6 +4,12 @@ enum class NavigationDestination(val destination: String) {
     HOME("home"),
     ERROR("error"),
     WEBVIEW("webview"),
-    SETTINGS_PASSWORD("settings_password"),
-    SETTINGS("settings")
+    CHECK_PASSWORD("check_password"),
+    SETTINGS("settings");
+
+    companion object {
+        fun SETTINGS(passwordChecked: Boolean): String = "${SETTINGS.destination}/$passwordChecked"
+
+        fun ERROR(text: String): String = "${ERROR.destination}?errorText=$text"
+    }
 }

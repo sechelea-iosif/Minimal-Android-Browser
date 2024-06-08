@@ -1,4 +1,4 @@
-package ro.sechelea.minimalAndroidBrowser.service
+package ro.sechelea.minimalAndroidBrowser.viewmodel
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
@@ -7,20 +7,22 @@ import kotlinx.coroutines.flow.first
 import ro.sechelea.minimalAndroidBrowser.data.domain.Password
 import ro.sechelea.minimalAndroidBrowser.data.repository.PasswordRepository
 import ro.sechelea.minimalAndroidBrowser.data.source.AppDatabase
+import ro.sechelea.minimalAndroidBrowser.data.source.Cipher
 
 
-class PasswordManager(
+class PasswordViewModel(
     application: Application
 ) : AndroidViewModel(application) {
     private val passwordRepository = PasswordRepository(
         AppDatabase.getIntance(application.applicationContext).passwordDao()
     )
+    private val cipher = Cipher()
 
     fun passwordExists(): Flow<Boolean> =
         passwordRepository.exists()
 
     fun verify(password: String): Flow<Boolean> =
-        passwordRepository.verify(encrypt(password))
+        passwordRepository.verify(encryptPassword(password))
 
     suspend fun remove(password: String) {
         if (verify(password).first()) {
@@ -29,14 +31,9 @@ class PasswordManager(
     }
 
     suspend fun update(password: String) {
-        if (passwordExists().first()) {
-            passwordRepository.clearPasswords()
-            passwordRepository.save(encrypt(password))
-        }
+        passwordRepository.clearPasswords()
+        passwordRepository.save(encryptPassword(password))
     }
 
-    private fun encrypt(password: String): Password {
-        // todo add real encryption
-        return Password("$password-encrypted")
-    }
+    private fun encryptPassword(password: String) = Password(cipher.encrypt(password))
 }

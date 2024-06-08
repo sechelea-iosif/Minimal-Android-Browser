@@ -1,8 +1,9 @@
-package ro.sechelea.minimalAndroidBrowser.base
+package ro.sechelea.minimalAndroidBrowser.ui.client
 
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.junit.runners.Parameterized
+import ro.sechelea.minimalAndroidBrowser.ui.screen.web.WebViewScreen.Companion.stripUrlBeforeSecondLevelDomain
 
 @RunWith(Parameterized::class)
 class UrlExtensionFunctionsTest(
@@ -12,9 +13,9 @@ class UrlExtensionFunctionsTest(
 
     @Test
     fun testStripUrl() {
-        assert(expected == given.stripUrlBeforeSecondLevelDomain())
-        assert(expected?.stripUrlBeforeSecondLevelDomain() == given.stripUrlBeforeSecondLevelDomain())
-        assert(expected == given.stripUrlBeforeSecondLevelDomain()?.stripUrlBeforeSecondLevelDomain())
+        assert(expected == stripUrlBeforeSecondLevelDomain(given))
+        assert(stripUrlBeforeSecondLevelDomain(expected ?: "") == stripUrlBeforeSecondLevelDomain(given))
+        assert(expected == stripUrlBeforeSecondLevelDomain(stripUrlBeforeSecondLevelDomain(given) ?: ""))
     }
 
     companion object {

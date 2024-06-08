@@ -5,11 +5,18 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.navArgument
 import ro.sechelea.minimalAndroidBrowser.ui.screen.NavigationDestination
+import ro.sechelea.minimalAndroidBrowser.ui.screen.NavigationDestination.CHECK_PASSWORD
+import ro.sechelea.minimalAndroidBrowser.ui.screen.NavigationDestination.ERROR
+import ro.sechelea.minimalAndroidBrowser.ui.screen.NavigationDestination.HOME
+import ro.sechelea.minimalAndroidBrowser.ui.screen.NavigationDestination.SETTINGS
+import ro.sechelea.minimalAndroidBrowser.ui.screen.NavigationDestination.WEBVIEW
 import ro.sechelea.minimalAndroidBrowser.ui.screen.UiScreen
-import ro.sechelea.minimalAndroidBrowser.ui.screen.settings.SettingsPasswordScreen
+import ro.sechelea.minimalAndroidBrowser.ui.screen.settings.CheckPasswordScreen
 import ro.sechelea.minimalAndroidBrowser.ui.screen.settings.SettingsScreen
 import ro.sechelea.minimalAndroidBrowser.ui.screen.web.ErrorScreen
 import ro.sechelea.minimalAndroidBrowser.ui.screen.web.HomeScreen
@@ -21,6 +28,10 @@ class Navigation(
     private val updateTitle: (String) -> Unit,
     private val innerPadding: PaddingValues
 ) : UiScreen {
+    companion object {
+        private const val PASSWORD_CHECKED = "passwordChecked"
+        private const val ERROR_TEXT = "errorText"
+    }
 
     @Composable
     override fun Show() {
@@ -29,32 +40,41 @@ class Navigation(
             navController = navController,
             startDestination = getDestination(initialUrl).destination
         ) {
-            composable(NavigationDestination.HOME.destination) {
+            composable(HOME.destination) {
                 updateTitle("Home")
                 HomeScreen().Show()
             }
-            composable(NavigationDestination.WEBVIEW.destination) {
-                WebViewScreen(initialUrl!!, updateTitle).Show()
+            composable(WEBVIEW.destination) {
+                updateTitle("Loading...")
+                WebViewScreen(initialUrl!!, updateTitle, navController).Show()
             }
-            composable(NavigationDestination.ERROR.destination) {
+            composable("${ERROR.destination}?$ERROR_TEXT={$ERROR_TEXT}",
+                arguments = listOf( navArgument(ERROR_TEXT) { type = NavType.StringType } )
+            ) {
                 updateTitle("Error")
-                ErrorScreen(initialUrl).Show()
+                val errorText: String? = it.arguments?.getString(ERROR_TEXT)
+                ErrorScreen(navController, errorText).Show()
             }
-            composable(NavigationDestination.SETTINGS_PASSWORD.destination) {
+            composable(CHECK_PASSWORD.destination) {
                 updateTitle("Settings")
-                SettingsPasswordScreen(navController).Show()
+                CheckPasswordScreen(navController).Show()
             }
-            composable(NavigationDestination.SETTINGS.destination) {
+            composable("${SETTINGS.destination}/{$PASSWORD_CHECKED}",
+                arguments = listOf( navArgument(PASSWORD_CHECKED) { type = NavType.BoolType } )
+            ) {
                 updateTitle("Settings")
-                SettingsScreen(navController).Show()
+                val passwordChecked: Boolean = it.arguments?.getBoolean(PASSWORD_CHECKED) ?: false
+                SettingsScreen(navController, passwordChecked).Show()
             }
         }
     }
 
     private fun getDestination(incomingUrl: String?): NavigationDestination {
-        return if (incomingUrl.isNullOrEmpty()) NavigationDestination.HOME
-        else if (isValidUrl(incomingUrl)) NavigationDestination.WEBVIEW
-        else NavigationDestination.ERROR
+        return when {
+            incomingUrl.isNullOrEmpty() -> HOME
+            isValidUrl(incomingUrl) -> WEBVIEW
+            else -> ERROR
+        }
     }
 
     private fun isValidUrl(incomingUrl: String): Boolean {
