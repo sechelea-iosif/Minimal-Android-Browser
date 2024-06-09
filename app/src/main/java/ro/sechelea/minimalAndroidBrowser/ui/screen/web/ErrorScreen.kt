@@ -5,6 +5,7 @@ import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.style.TextAlign
 import androidx.navigation.NavHostController
 import ro.sechelea.minimalAndroidBrowser.ui.Background
 import ro.sechelea.minimalAndroidBrowser.ui.CenteredPaddedColumn
@@ -18,14 +19,15 @@ class ErrorScreen(
     @Composable
     override fun Show() {
         Background {
-            CenteredPaddedColumn {
-                BackHandler {
-                    navController.navigate(HOME.destination) {
-                        popUpTo(HOME.destination) { inclusive = false }
-                    }
+            BackHandler {
+                navController.navigate(HOME.destination) {
+                    popUpTo(HOME.destination) { inclusive = true }
                 }
+            }
+            CenteredPaddedColumn (padding = 30) {
                 SelectionContainer {
                     Text(
+                        textAlign = TextAlign.Center,
                         color = Color.Red,
                         text = errorText ?: "Unknown Error"
                     )

@@ -42,13 +42,14 @@ fun Background(
 
 @Composable
 fun CenteredPaddedColumn(
+    padding: Int = 10,
     content: @Composable () -> Unit
 ) {
     Column(
         modifier = Modifier
             .fillMaxSize()
             .verticalScroll(rememberScrollState())
-            .padding(10.dp)
+            .padding(padding.dp)
         ,
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center,
@@ -103,6 +104,7 @@ private fun PasswordOutlinedTextField(
 ) {
     val isVisible = remember { mutableStateOf(false) }
     OutlinedTextField(
+        modifier = Modifier.fillMaxWidth(0.7F),
         value = value.value,
         onValueChange = { value.value = it },
         label = { Text(text = label) },

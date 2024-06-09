@@ -1,7 +1,10 @@
 package ro.sechelea.minimalAndroidBrowser.ui.screen.settings
 
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.Button
@@ -40,6 +43,7 @@ class SettingsScreen(
         Background {
             CenteredPaddedColumn {
                 PasswordForm()
+                Spacer(modifier = Modifier.size(10.dp))
                 BlackListedWebsites()
             }
         }
@@ -52,7 +56,7 @@ class SettingsScreen(
 
         if (isPasswordSet && !passwordChecked) navController.navigate(CHECK_PASSWORD.destination)
 
-        Card(modifier = Modifier.padding(10.dp)) { Column {
+        Card(modifier = Modifier.padding(10.dp)) { Column (modifier = Modifier.padding(10.dp)) {
             Text(text = if (isPasswordSet) "Password Set. Change your Password?" else "Set new Password")
 
             val coroutineScope = rememberCoroutineScope()
@@ -72,33 +76,40 @@ class SettingsScreen(
 
     @Composable
     private fun BlackListedWebsites() {
-        Text(text = "Blacklisted Websites will not be loaded (you may use regex)")
+        Column (modifier = Modifier.padding(20.dp)) {
+            Text(text = "Blacklisted Websites will not be loaded (you may use regex)")
 
-        val blacklistViewModel: BlacklistViewModel = viewModel()
-        val coroutineScope = rememberCoroutineScope()
+            val blacklistViewModel: BlacklistViewModel = viewModel()
+            val coroutineScope = rememberCoroutineScope()
 
-        var newWebsite by remember { mutableStateOf("") }
-        CenteredSpacedRow {
-            TextField(value = newWebsite, onValueChange =  { newWebsite = it })
-
-            Button(onClick = { coroutineScope.launch {
-                blacklistViewModel.add(newWebsite)
-                newWebsite = ""
-            } } ) {
-                Text(text = "Add")
-            }
-        }
-
-        val blacklist : List<WebsiteUrl> by blacklistViewModel.getAll()
-            .collectAsState(initial = listOf(WebsiteUrl.createDummy("Loading...")))
-        blacklist.forEach {
+            var newWebsite by remember { mutableStateOf("") }
             CenteredSpacedRow {
-                Text(text = it.url)
+                TextField(
+                    modifier = Modifier.fillMaxWidth(0.7F),
+                    value = newWebsite,
+                    onValueChange =  { newWebsite = it },
+                    placeholder = { Text(text = "url") }
+                )
 
                 Button(onClick = { coroutineScope.launch {
-                    blacklistViewModel.remove(it)
-                } }) {
-                    Icon(contentDescription = "Remove", imageVector = Icons.Default.Delete)
+                    blacklistViewModel.add(newWebsite)
+                    newWebsite = ""
+                } } ) {
+                    Text(text = "Add")
+                }
+            }
+
+            val blacklist : List<WebsiteUrl> by blacklistViewModel.getAll()
+                .collectAsState(initial = listOf(WebsiteUrl.createDummy("Loading...")))
+            blacklist.forEach {
+                CenteredSpacedRow {
+                    Text(text = it.url)
+
+                    Button(onClick = { coroutineScope.launch {
+                        blacklistViewModel.remove(it)
+                    } }) {
+                        Icon(contentDescription = "Remove", imageVector = Icons.Default.Delete)
+                    }
                 }
             }
         }
