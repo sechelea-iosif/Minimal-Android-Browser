@@ -18,7 +18,7 @@ import ro.sechelea.minimalAndroidBrowser.viewmodel.BlacklistViewModel
 import java.util.Optional
 
 class WebViewScreen(
-    private val webUrl: String,
+    private var initialWebUrl: String,
     private val updateTitle: (String) -> Unit,
     private val navController: NavHostController,
 ) : UiScreen {
@@ -30,7 +30,7 @@ class WebViewScreen(
         blacklistViewModel = viewModel()
         AndroidView(
             modifier = Modifier.fillMaxSize(),
-            update = { it.loadUrl(webUrl) },
+            update = { it.loadUrl(initialWebUrl) },
             factory = { WebView(it).apply {
                 webViewClient = MinimalWebViewClient(::onWebViewNavigation)
                 settings.applyWebSettings()
@@ -38,10 +38,13 @@ class WebViewScreen(
         )
     }
 
-    private fun onWebViewNavigation(url: String) {
-        updateTitle(url)
+    private fun onWebViewNavigation(url: String, isRedirect: Boolean?) {
         try {
-            tryBlock(url)
+            if (isRedirect == true) {
+                initialWebUrl = url
+            } else {
+                tryBlock(url)
+            }
             tryRestrict(url)
             updateTitle(url)
         } catch (exception: IllegalArgumentException) {
@@ -62,7 +65,7 @@ class WebViewScreen(
 
     private fun tryBlock(url: String) {
         val newUrl = stripUrlBeforeSecondLevelDomain(url)
-        val initialUrl = stripUrlBeforeSecondLevelDomain(webUrl)
+        val initialUrl = stripUrlBeforeSecondLevelDomain(initialWebUrl)
 
         if (newUrl == null || initialUrl == null)
             throw IllegalArgumentException("Invalid Url")
@@ -70,8 +73,9 @@ class WebViewScreen(
 
         if (newUrl.startsWith(initialUrl)) {
             val endOfNewUrl = newUrl.removePrefix(initialUrl)
-            if (!(endOfNewUrl.startsWith("?") || endOfNewUrl.startsWith("#")))
-                throw IllegalArgumentException("Navigation to page disabled: $newUrl")
+            if (endOfNewUrl.startsWith("?") || endOfNewUrl.startsWith("#")) {
+                return
+            } else throw IllegalArgumentException("Navigation to page disabled: $newUrl")
         } else throw IllegalArgumentException("Navigation to page disabled: $newUrl")
     }
 
