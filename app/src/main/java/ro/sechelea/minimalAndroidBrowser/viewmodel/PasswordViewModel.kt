@@ -4,10 +4,10 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
-import ro.sechelea.minimalAndroidBrowser.data.domain.Password
-import ro.sechelea.minimalAndroidBrowser.data.repository.PasswordRepository
-import ro.sechelea.minimalAndroidBrowser.data.source.AppDatabase
-import ro.sechelea.minimalAndroidBrowser.data.source.Cipher
+import ro.sechelea.minimalAndroidBrowser.model.domain.Password
+import ro.sechelea.minimalAndroidBrowser.model.repository.PasswordRepository
+import ro.sechelea.minimalAndroidBrowser.model.source.AppDatabase
+import ro.sechelea.minimalAndroidBrowser.model.source.Cipher
 
 
 class PasswordViewModel(

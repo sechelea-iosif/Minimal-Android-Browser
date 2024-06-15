@@ -4,9 +4,9 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.runtime.Composable
-import ro.sechelea.minimalAndroidBrowser.ui.Background
-import ro.sechelea.minimalAndroidBrowser.ui.screen.main.MainScreen
-import ro.sechelea.minimalAndroidBrowser.ui.theme.MinimalAndroidBrowserTheme
+import ro.sechelea.minimalAndroidBrowser.view.Background
+import ro.sechelea.minimalAndroidBrowser.view.screen.main.MainScreen
+import ro.sechelea.minimalAndroidBrowser.view.theme.MinimalAndroidBrowserTheme
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -15,13 +15,13 @@ class MainActivity : ComponentActivity() {
             App(intent.data?.toString())
         }
     }
-}
 
-@Composable
-private fun App(intentData: String?) {
-    MinimalAndroidBrowserTheme().Show {
-        Background {
-            MainScreen(intentData).Show()
+    @Composable
+    private fun App(intentData: String?) {
+        MinimalAndroidBrowserTheme().Show {
+            Background {
+                MainScreen(intentData).Show()
+            }
         }
     }
 }

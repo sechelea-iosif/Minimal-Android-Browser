@@ -3,9 +3,9 @@ package ro.sechelea.minimalAndroidBrowser.viewmodel
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import kotlinx.coroutines.flow.Flow
-import ro.sechelea.minimalAndroidBrowser.data.domain.WebsiteUrl
-import ro.sechelea.minimalAndroidBrowser.data.repository.BlacklistRepository
-import ro.sechelea.minimalAndroidBrowser.data.source.AppDatabase
+import ro.sechelea.minimalAndroidBrowser.model.domain.WebsiteUrl
+import ro.sechelea.minimalAndroidBrowser.model.repository.BlacklistRepository
+import ro.sechelea.minimalAndroidBrowser.model.source.AppDatabase
 import java.time.LocalDateTime
 
 class BlacklistViewModel(
