@@ -23,6 +23,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import ro.sechelea.minimalAndroidBrowser.model.domain.WebsiteUrl
 import ro.sechelea.minimalAndroidBrowser.view.Background
@@ -77,39 +78,56 @@ class SettingsScreen(
     @Composable
     private fun BlackListedWebsites() {
         Column (modifier = Modifier.padding(20.dp)) {
-            Text(text = "Blacklisted Websites will not be loaded (you may use regex)")
-
-            val blacklistViewModel: BlacklistViewModel = viewModel()
             val coroutineScope = rememberCoroutineScope()
+            val blacklistViewModel: BlacklistViewModel = viewModel()
 
-            var newWebsite by remember { mutableStateOf("") }
-            CenteredSpacedRow {
-                TextField(
-                    modifier = Modifier.fillMaxWidth(0.7F),
-                    value = newWebsite,
-                    onValueChange =  { newWebsite = it },
-                    placeholder = { Text(text = "url") }
-                )
+            AddWebsiteForm(coroutineScope, blacklistViewModel)
+            WebsitesList(coroutineScope, blacklistViewModel)
+        }
+    }
 
-                Button(onClick = { coroutineScope.launch {
+    @Composable
+    private fun AddWebsiteForm(
+        coroutineScope: CoroutineScope,
+        blacklistViewModel: BlacklistViewModel
+    ) {
+        Text(text = "Blacklisted Websites will not be loaded (you may use regex)")
+
+        var newWebsite by remember { mutableStateOf("") }
+        CenteredSpacedRow {
+            TextField(
+                modifier = Modifier.fillMaxWidth(0.7F),
+                value = newWebsite,
+                onValueChange = { newWebsite = it },
+                placeholder = { Text(text = "url") }
+            )
+
+            Button(onClick = {
+                coroutineScope.launch {
                     blacklistViewModel.add(newWebsite)
                     newWebsite = ""
-                } } ) {
-                    Text(text = "Add")
                 }
+            }) {
+                Text(text = "Add")
             }
+        }
+    }
 
-            val blacklist : List<WebsiteUrl> by blacklistViewModel.getAll()
-                .collectAsState(initial = listOf(WebsiteUrl.createDummy("Loading...")))
-            blacklist.forEach {
-                CenteredSpacedRow {
-                    Text(text = it.url)
+    @Composable
+    private fun WebsitesList(
+        coroutineScope: CoroutineScope,
+        blacklistViewModel: BlacklistViewModel,
+    ) {
+        val blacklist: List<WebsiteUrl> by blacklistViewModel.getAll()
+            .collectAsState(initial = listOf(WebsiteUrl.createDummy("Loading...")))
+        blacklist.forEach {
+            CenteredSpacedRow {
+                Text(text = it.url)
 
-                    Button(onClick = { coroutineScope.launch {
-                        blacklistViewModel.remove(it)
-                    } }) {
-                        Icon(contentDescription = "Remove", imageVector = Icons.Default.Delete)
-                    }
+                Button(onClick = { coroutineScope.launch {
+                    blacklistViewModel.remove(it)
+                } }) {
+                    Icon(contentDescription = "Remove", imageVector = Icons.Default.Delete)
                 }
             }
         }
